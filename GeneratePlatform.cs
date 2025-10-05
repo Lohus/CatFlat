@@ -4,7 +4,15 @@ public class GeneratePlatform : MonoBehaviour
 {
     [SerializeField] GameObject[] platform;
     private float offsetX = 2.2f;
-    private float offsetY = 0.4f;
+    private float offsetY = 0.35f;
+
+    void Start()
+    {
+        for (float height = (1 - offsetY); height <= 10.5; height += (1 - offsetY))
+        {
+            Instantiate(platform[0], new Vector3(Random.Range(-offsetX, offsetX), height, transform.position.z), transform.rotation);
+        }
+    }
     void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log("Exit" + other.name);
