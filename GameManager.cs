@@ -4,9 +4,22 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [HideInInspector] public static GameManager instance;
     [SerializeField] TextMeshProUGUI scoreTx;
+    [SerializeField] GameObject menuPanel;
     Transform playerTr;
     private int score = 0;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         playerTr = Player.instance.transform;
@@ -26,5 +39,10 @@ public class GameManager : MonoBehaviour
         {
             score = _score;
         }
+    }
+    public void PlayerDead()
+    {
+        Time.timeScale = 0;
+        menuPanel.SetActive(true);
     }
 }

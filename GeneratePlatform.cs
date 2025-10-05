@@ -15,6 +15,7 @@ public class GeneratePlatform : MonoBehaviour
     }
     void OnTriggerExit2D(Collider2D other)
     {
+        if (!Application.isPlaying) return;
         Debug.Log("Exit" + other.name);
         if (other.gameObject.GetComponent<Platform>())
         {
