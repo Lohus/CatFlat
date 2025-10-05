@@ -4,24 +4,24 @@ public class GeneratePlatform : MonoBehaviour
 {
     [SerializeField] GameObject[] platform;
     private float offsetX = 2.2f;
-    private float offsetY = 0.35f;
+    private float offsetY = 0.65f;
+    private float heightPlatform = 0;
 
     void Start()
     {
-        for (float height = (1 - offsetY); height <= 10.5; height += (1 - offsetY))
+        for (float height = offsetY; height <= transform.position.y; height += offsetY)
         {
             Instantiate(platform[0], new Vector3(Random.Range(-offsetX, offsetX), height, transform.position.z), transform.rotation);
+            heightPlatform = height;
         }
     }
-    void OnTriggerExit2D(Collider2D other)
+    void Update()
     {
-        if (!Application.isPlaying) return;
-        Debug.Log("Exit" + other.name);
-        if (other.gameObject.GetComponent<Platform>())
+        if (transform.position.y - heightPlatform >= offsetY)
         {
-            Debug.Log("Instantiate");
+            heightPlatform += offsetY;
             int index = Random.Range(0, platform.Length);
-            Instantiate(platform[index], new Vector3(Random.Range(-offsetX, offsetX), transform.position.y - offsetY, transform.position.z), transform.rotation);
-        }
-    }
+            Instantiate(platform[index], new Vector3(Random.Range(-offsetX, offsetX), heightPlatform, transform.position.z), transform.rotation);
+        } 
+    } 
 }
