@@ -33,7 +33,7 @@ public class Platform : MonoBehaviour
         }
         else
         {
-            return false;   
+            return false;
         }
-    }    
+    }
 }
