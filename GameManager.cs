@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         UpScore();
         scoreTx.text = "Score: " + score;
+        UPLevel();
     }
 
     void UpScore()
@@ -44,5 +46,22 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
         menuPanel.SetActive(true);
+    }
+
+    void UPLevel()
+    {
+        int level = GeneratePlatform.instance.level;
+        if (score > 100 && level == 1)
+        {
+            GeneratePlatform.instance.level += 1;
+        }
+        else if (score > 200 && level == 2)
+        {
+            GeneratePlatform.instance.level += 1;
+        }
+        else if (score > 300 && level == 3)
+        {
+            GeneratePlatform.instance.level += 1;
+        }
     }
 }

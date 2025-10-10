@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private float velocity = 80;
     private float maxHorizontalSpeed = 3;
     public float velocityY;
+    [SerializeField] private Sprite stay, jump;
     void Awake()
     {
         if (instance == null)
@@ -29,10 +30,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FlipSprite();
+        //FlipSprite();
         Controll();
         velocityY = rb2D.velocity.y;
         EnableBoxColider();
+        ChangeSprite();
     }
 
     void FlipSprite()
@@ -53,10 +55,12 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             rb2D.AddForce(Vector2.left * velocity * Time.fixedDeltaTime);
+            sr.flipX = false;
         }
         if (Input.GetKey(KeyCode.D))
         {
             rb2D.AddForce(Vector2.right * velocity * Time.fixedDeltaTime);
+            sr.flipX = true;
         }
         if (Mathf.Abs(rb2D.velocity.x) > maxHorizontalSpeed)
         {
@@ -72,6 +76,18 @@ public class Player : MonoBehaviour
         else
         {
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
+    }
+
+    void ChangeSprite()
+    {
+        if (velocityY > 0)
+        {
+            sr.sprite = jump;
+        }
+        else
+        {
+            sr.sprite = stay;
         }
     }
 }
