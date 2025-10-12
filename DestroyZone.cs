@@ -5,7 +5,7 @@ public class DestroyZone : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<Platform>())
+        if (other.gameObject.GetComponent<Platform>() || other.CompareTag("Platform"))
         {
             Destroy(other.gameObject);
         }
