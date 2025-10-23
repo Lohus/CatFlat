@@ -4,8 +4,9 @@ public class GeneratePlatform : MonoBehaviour
 {
     [HideInInspector] public static GeneratePlatform instance;
     [SerializeField] GameObject[] platform;
-    private float offsetX = 2.2f;
-    private float offsetY = 0.65f;
+    [SerializeField] GameBalance gameBalance;
+    private float offsetX;
+    private float offsetY;
     private float heightPlatform = 0;
     public int level = 1;
     void Awake()
@@ -22,6 +23,16 @@ public class GeneratePlatform : MonoBehaviour
 
     void Start()
     {
+        if (gameBalance == null)
+        {
+            Debug.LogError("Settings is not assigned in Inspector for " + gameObject.name);
+            return;
+        }
+        else
+        {
+            offsetX = gameBalance.offsetX;
+            offsetY = gameBalance.offsetY; 
+        }
         for (float height = offsetY; height <= transform.position.y; height += offsetY)
         {
             Instantiate(platform[0], new Vector3(Random.Range(-offsetX, offsetX), height, transform.position.z), transform.rotation);

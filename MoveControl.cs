@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MoveControl : MonoBehaviour
 {
-    [SerializeField] private float offsetY = 0;
+    [SerializeField] private float offsetY = 0; // Offset from player
     private Transform playerTr;
     void Start()
     {

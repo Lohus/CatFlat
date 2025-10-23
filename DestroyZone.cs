@@ -9,6 +9,9 @@ public class DestroyZone : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
         if (other.gameObject.GetComponent<Player>())
         {
             GameManager.instance.PlayerDead();

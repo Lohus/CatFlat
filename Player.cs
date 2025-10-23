@@ -4,9 +4,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [HideInInspector] public static Player instance;
+    [SerializeField] GameBalance gameBalance;
     private Rigidbody2D rb2D;
     private SpriteRenderer sr;
-    private float velocity = 80;
+    private float horizontalVelocity = 80;
     private float maxHorizontalSpeed = 3;
     public float velocityY;
     [SerializeField] private Sprite stay, jump;
@@ -23,6 +24,16 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
+        if (gameBalance == null)
+        {
+            Debug.LogError("Settings is not assigned in Inspector for " + gameObject.name);
+            return;
+        }
+        else
+        {
+            horizontalVelocity = gameBalance.horizontalVelocity;
+            maxHorizontalSpeed = gameBalance.maxHorizontalSpeed; 
+        }
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
     }
@@ -54,12 +65,12 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            rb2D.AddForce(Vector2.left * velocity * Time.fixedDeltaTime);
+            rb2D.AddForce(Vector2.left * horizontalVelocity * Time.fixedDeltaTime);
             sr.flipX = false;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rb2D.AddForce(Vector2.right * velocity * Time.fixedDeltaTime);
+            rb2D.AddForce(Vector2.right * horizontalVelocity * Time.fixedDeltaTime);
             sr.flipX = true;
         }
         if (Mathf.Abs(rb2D.velocity.x) > maxHorizontalSpeed)
