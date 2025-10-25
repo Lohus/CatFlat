@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         UpScore();
-        scoreTx.text = "Score: " + score;
+        scoreTx.text = score.ToString();
         UPLevel();
     }
 
