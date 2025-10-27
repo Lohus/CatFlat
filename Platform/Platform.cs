@@ -1,7 +1,9 @@
+using System.Numerics;
 using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
+    [SerializeField] GameObject stepParticle;
     private Transform playerTr;
     void Start()
     {
@@ -20,6 +22,7 @@ public class Platform : MonoBehaviour
         ContactPoint2D contact = collision.contacts[0];
         if (collision.gameObject.GetComponent<Player>() && CheckHeight(collision.transform, transform) && contact.normal.y == -1f && Player.instance.velocityY <= 0)
         {
+            Instantiate(stepParticle, gameObject.transform.position, transform.rotation);
             foreach (IPlatfromEffect effect in GetComponents<IPlatfromEffect>())
             {
                 effect.ApplyEffect(collision);

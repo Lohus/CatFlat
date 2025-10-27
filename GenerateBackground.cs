@@ -6,7 +6,7 @@ public class GenerateBackground : MonoBehaviour
     {
         if (gameObject.transform.position.y <= Player.instance.transform.position.y)
         {
-            gameObject.transform.position = gameObject.transform.position + new Vector3(0, 4, 0);
+            gameObject.transform.position = gameObject.transform.position + new Vector3(0, 5, 0);
         } 
     }
 }
