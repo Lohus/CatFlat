@@ -11,6 +11,7 @@ public class GameBalance : ScriptableObject
     [Header("Player")]
     public float horizontalVelocity = 80;
     public float maxHorizontalSpeed = 3;
+    public float maxVerticalSpeed = 50;
 
     [Header("Platforms")]
     public float baseForce = 300; // Base force for standart platforms

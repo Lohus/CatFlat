@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer sr;
     private float horizontalVelocity = 80;
     private float maxHorizontalSpeed = 3;
+    private float maxVerticalSpeed = 50;
     public float velocityY;
     [SerializeField] private Sprite stay, jump;
     void Awake()
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            maxVerticalSpeed = gameBalance.maxVerticalSpeed;
             horizontalVelocity = gameBalance.horizontalVelocity;
             maxHorizontalSpeed = gameBalance.maxHorizontalSpeed; 
         }
@@ -43,6 +45,7 @@ public class Player : MonoBehaviour
     {
         //FlipSprite();
         Controll();
+        ControlVerticalSpeed();
         velocityY = rb2D.velocity.y;
         EnableBoxColider();
         ChangeSprite();
@@ -101,4 +104,12 @@ public class Player : MonoBehaviour
             sr.sprite = stay;
         }
     }
+     void ControlVerticalSpeed()
+    {
+        if (rb2D.velocity.y <= -maxVerticalSpeed)
+        {
+            Debug.Log("MaxSpeed");
+            rb2D.velocity = new Vector2(rb2D.velocity.x, -maxVerticalSpeed);
+        }
+    }        
 }
