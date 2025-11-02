@@ -43,38 +43,34 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //FlipSprite();
-        Controll();
+        //Controll();
         ControlVerticalSpeed();
         velocityY = rb2D.velocity.y;
         EnableBoxColider();
-        ChangeSprite();
+        ChangeSpriteVertical();
+        ChangeSpriteHorizontal();
     }
 
-    void FlipSprite()
+    void ChangeSpriteHorizontal()
     {
-        if (transform.position.x < 0)
+        if (rb2D.velocity.x < 0)
         {
-            sr.flipX = true;
-            //transform.localScale = new Vector3(-0.2f, 0.2f, 0.2f);
+            sr.flipX = false;
         }
         else
         {
-            sr.flipX = false;
-            //transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            sr.flipX = true;
         }
     }
     void Controll()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            rb2D.AddForce(Vector2.left * horizontalVelocity * Time.fixedDeltaTime);
-            sr.flipX = false;
+            rb2D.AddForce(Vector2.left * horizontalVelocity * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rb2D.AddForce(Vector2.right * horizontalVelocity * Time.fixedDeltaTime);
-            sr.flipX = true;
+            rb2D.AddForce(Vector2.right * horizontalVelocity * Time.deltaTime);
         }
         if (Mathf.Abs(rb2D.velocity.x) > maxHorizontalSpeed)
         {
@@ -93,7 +89,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void ChangeSprite()
+    void ChangeSpriteVertical()
     {
         if (velocityY > 0)
         {

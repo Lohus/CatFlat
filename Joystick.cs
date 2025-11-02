@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerInputController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // скорость движения игрока
+    public float moveSpeed = 80f; // скорость движения игрока
     private Rigidbody2D rb;
 
     private Vector2 startTouchPos;   // точка начала касания

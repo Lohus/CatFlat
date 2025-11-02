@@ -17,10 +17,10 @@ public class Platform : MonoBehaviour
         }
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         ContactPoint2D contact = collision.contacts[0];
-        if (collision.gameObject.GetComponent<Player>() && CheckHeight(collision.transform, transform) && contact.normal.y == -1f && Player.instance.velocityY <= 0)
+        if (collision.gameObject.GetComponent<Player>() && CheckHeight(collision.transform, transform) && contact.normal.y == - 1f && Player.instance.velocityY <= 0)
         {
             Instantiate(stepParticle, gameObject.transform.position, transform.rotation);
             foreach (IPlatfromEffect effect in GetComponents<IPlatfromEffect>())
