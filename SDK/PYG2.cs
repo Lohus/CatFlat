@@ -19,6 +19,7 @@ public class PYG2 : MonoBehaviour, ISDK
 {
     public static PYG2 instance;
     private string nameLeaderboard = "MaxScore";
+    private int countLeaders = 3;
     private LBData lBData;
     void Awake()
     {
@@ -31,7 +32,7 @@ public class PYG2 : MonoBehaviour, ISDK
         {
             Destroy(gameObject);
         }
-        YG2.GetLeaderboard(nameLeaderboard, 3, 1);
+        YG2.GetLeaderboard(nameLeaderboard, countLeaders, 1);
     }
     public void AwakeInterstitialAds()
     {
@@ -50,13 +51,13 @@ public class PYG2 : MonoBehaviour, ISDK
         UpdateLeaderboardAsync();
     }
 
-    public PlayerData[] ShowLeaderboard()
+    public async Task<PlayerData[]> ShowLeaderboard()
     {
-        if (lBData == null)
+        while (lBData == null)
         {
-            Debug.Log("LBData is null");
+            await Task.Yield();
         }
-        PlayerData[] playersLB = new PlayerData[3];
+        PlayerData[] playersLB = new PlayerData[countLeaders];
         for (int i = 0; i < playersLB.Length; i++)
         {
             playersLB[i].name = lBData.players[i].name;
@@ -71,7 +72,7 @@ public class PYG2 : MonoBehaviour, ISDK
     {
         var taskLBData = new TaskCompletionSource<LBData>();
         YG2.onGetLeaderboard += LBDataReceived;
-        YG2.GetLeaderboard(nameLeaderboard, 3, 1);
+        YG2.GetLeaderboard(nameLeaderboard, countLeaders, 1);
         await taskLBData.Task;
         void LBDataReceived(LBData newLBData)
         {
