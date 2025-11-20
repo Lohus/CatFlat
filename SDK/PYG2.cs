@@ -54,7 +54,7 @@ public class PYG2 : MonoBehaviour, ISDK
         return playersLB;
     }
 
-    async Task UpdateLeaderboardAsync()
+    async Task UpdateLeaderboardAsync() // Async get leaderboard data
     {
         var taskLBData = new TaskCompletionSource<LBData>();
         YG2.onGetLeaderboard += LBDataReceived;
