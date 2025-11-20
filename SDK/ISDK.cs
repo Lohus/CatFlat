@@ -4,7 +4,8 @@ using UnityEngine;
 public interface ISDK
 {
     public void AwakeInterstitialAds(); // Full-screen ADS
-    public void SaveRecords(int records); // Save records on platforms
-    public PlayerData[] ShowLeaderboard();
+    public Task SaveRecordsAsync(int records); // Save records on platforms
+    public Task<PlayerData[]> ShowLeaderboardAsync();
+    public Task<PlayerData> ShowPlayerDataAsync();
 
 }

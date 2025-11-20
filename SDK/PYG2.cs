@@ -13,6 +13,13 @@ public struct PlayerData
     public string photo;
     public int score;
     public int rank;
+    public readonly bool IsNull()
+    {
+        return string.IsNullOrEmpty(name) && 
+               string.IsNullOrEmpty(photo) && 
+               rank == 0 && 
+               score == 0;
+    }
 }
 
 public class PYG2 : MonoBehaviour, ISDK
@@ -32,7 +39,7 @@ public class PYG2 : MonoBehaviour, ISDK
         {
             Destroy(gameObject);
         }
-        YG2.GetLeaderboard(nameLeaderboard, countLeaders, 1);
+        UpdateLeaderboardAsync();
     }
     public void AwakeInterstitialAds()
     {
@@ -51,7 +58,7 @@ public class PYG2 : MonoBehaviour, ISDK
         UpdateLeaderboardAsync();
     }
 
-    public async Task<PlayerData[]> ShowLeaderboard()
+    public async Task<PlayerData[]> ShowLeaderboardAsync()
     {
         while (lBData == null)
         {
@@ -68,6 +75,21 @@ public class PYG2 : MonoBehaviour, ISDK
         return playersLB;
     }
 
+    public async Task<PlayerData> ShowPlayerDataAsync()
+    {
+        await WaitLBData();
+        PlayerData player = new PlayerData();
+        if (YG2.player.auth == true)
+        {
+            player.name = YG2.player.name;
+            player.photo = YG2.player.photo;
+            player.rank = lBData.currentPlayer.rank;
+            player.score = lBData.currentPlayer.score;
+        }
+        return player;
+
+    }
+
     async Task UpdateLeaderboardAsync() // Async get leaderboard data
     {
         var taskLBData = new TaskCompletionSource<LBData>();
@@ -79,6 +101,14 @@ public class PYG2 : MonoBehaviour, ISDK
             lBData = newLBData;
             taskLBData.SetResult(newLBData);
             YG2.onGetLeaderboard -= LBDataReceived;
+        }
+    }
+
+    async Task WaitLBData()
+    {
+        while(lBData == null)
+        {
+            await Task.Yield();
         }
     }
 }
