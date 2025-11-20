@@ -7,6 +7,14 @@ using UnityEngine.TextCore.Text;
 using YG;
 using YG.Utils.LB;
 
+public struct PlayerData
+{
+    public string name;
+    public string photo;
+    public int score;
+    public int rank;
+}
+
 public class PYG2 : MonoBehaviour, ISDK
 {
     public static PYG2 instance;
@@ -29,12 +37,17 @@ public class PYG2 : MonoBehaviour, ISDK
     {
         // Нписать реализцию позже
     }
-    public void SaveRecords(int records)
+    public async Task SaveRecordsAsync(int records)
     {
-        if (lBData != null)
+        while (lBData == null)
         {
-            if (records > lBData.currentPlayer.score) YG2.SetLeaderboard(nameLeaderboard, records);
+            await Task.Yield();
         }
+        if (records > lBData.currentPlayer.score)
+        {
+            YG2.SetLeaderboard(nameLeaderboard, records);
+        }
+        UpdateLeaderboardAsync();
     }
 
     public PlayerData[] ShowLeaderboard()
@@ -67,13 +80,4 @@ public class PYG2 : MonoBehaviour, ISDK
             YG2.onGetLeaderboard -= LBDataReceived;
         }
     }
-
-}
-
-public struct PlayerData
-{
-    public string name;
-    public string photo;
-    public int score;
-    public int rank;
 }
