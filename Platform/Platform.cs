@@ -13,7 +13,7 @@ public class Platform : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player is not exist");
+            Debug.LogError("Player is not exist");
         }
     }
 

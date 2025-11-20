@@ -104,7 +104,6 @@ public class Player : MonoBehaviour
     {
         if (rb2D.velocity.y <= -maxVerticalSpeed)
         {
-            Debug.Log("MaxSpeed");
             rb2D.velocity = new Vector2(rb2D.velocity.x, -maxVerticalSpeed);
         }
     }        

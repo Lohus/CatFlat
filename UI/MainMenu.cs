@@ -1,4 +1,5 @@
 
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] Button playButton, leaderboardButton, menuButton;
     [SerializeField] GameObject mainMenu, leaderboard;
+    [SerializeField] TextMeshProUGUI score;
 
     void Start()
     {
@@ -28,4 +30,5 @@ public class MainMenu : MonoBehaviour
         leaderboard.SetActive(false);
         mainMenu.SetActive(true);
     }
+
 }

@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerDead()
     {
+        PYG2.instance.SaveRecords(score);
         Time.timeScale = 0;
         menuPanel.SetActive(true);
     }

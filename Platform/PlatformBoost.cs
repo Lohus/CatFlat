@@ -19,6 +19,5 @@ public class PlatformBoost : MonoBehaviour, IPlatfromEffect
     public void ApplyEffect(Collision2D collision)
     {
         collision.gameObject.GetComponent<Rigidbody2D>().AddForce(transform.up * force);
-        Debug.Log("Add Force: " + force);
     }
 }
