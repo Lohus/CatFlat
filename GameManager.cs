@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
         playerTr = Player.instance.transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpScore();
@@ -42,7 +41,7 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerDead()
     {
-        PYG2.instance.SaveRecords(score);
+        _ = PYG2.instance.SaveRecordsAsync(score);
         Time.timeScale = 0;
         menuPanel.SetActive(true);
     }

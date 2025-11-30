@@ -1,26 +1,7 @@
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using YG;
 using YG.Utils.LB;
-
-public struct PlayerData
-{
-    public string name;
-    public string photo;
-    public int score;
-    public int rank;
-    public readonly bool IsNull()
-    {
-        return string.IsNullOrEmpty(name) && 
-               string.IsNullOrEmpty(photo) && 
-               rank == 0 && 
-               score == 0;
-    }
-}
 
 public class PYG2 : MonoBehaviour, ISDK
 {
@@ -39,7 +20,7 @@ public class PYG2 : MonoBehaviour, ISDK
         {
             Destroy(gameObject);
         }
-        UpdateLeaderboardAsync();
+        _ = UpdateLeaderboardAsync();
     }
     public void AwakeInterstitialAds()
     {
@@ -47,6 +28,7 @@ public class PYG2 : MonoBehaviour, ISDK
     }
     public async Task SaveRecordsAsync(int records)
     {
+        Debug.Log("[CatFlatLog] Start save records");
         while (lBData == null)
         {
             await Task.Yield();
@@ -54,17 +36,23 @@ public class PYG2 : MonoBehaviour, ISDK
         if (records > lBData.currentPlayer.score)
         {
             YG2.SetLeaderboard(nameLeaderboard, records);
+            Debug.Log("[CatFlatLog] Records " + records + " added on leadeborad");
         }
-        UpdateLeaderboardAsync();
+        else
+        {
+            Debug.Log("[CatFlatLog] Records " + records + " small than leaderboard " + lBData.currentPlayer.score);
+        }
+        _ = UpdateLeaderboardAsync();
     }
 
-    public async Task<PlayerData[]> ShowLeaderboardAsync()
+    public async Task<PlayerData[]> GetLeaderboardAsync()
     {
+        Debug.Log("[CatFlatLog] Gettings Players data");
         while (lBData == null)
         {
             await Task.Yield();
         }
-        PlayerData[] playersLB = new PlayerData[countLeaders];
+        PlayerData[] playersLB = new PlayerData[lBData.players.Length];
         for (int i = 0; i < playersLB.Length; i++)
         {
             playersLB[i].name = lBData.players[i].name;
@@ -72,11 +60,13 @@ public class PYG2 : MonoBehaviour, ISDK
             playersLB[i].score = lBData.players[i].score;
             playersLB[i].rank = lBData.players[i].rank;
         }
+        Debug.Log("[CatFlatLog] Send Players data for " + playersLB.Length);
         return playersLB;
     }
 
-    public async Task<PlayerData> ShowPlayerDataAsync()
+    public async Task<PlayerData> GetPlayerDataAsync()
     {
+        Debug.Log("[CatFlatLog] Gettings Player data");
         await WaitLBData();
         PlayerData player = new PlayerData();
         if (YG2.player.auth == true)
@@ -86,12 +76,13 @@ public class PYG2 : MonoBehaviour, ISDK
             player.rank = lBData.currentPlayer.rank;
             player.score = lBData.currentPlayer.score;
         }
+        Debug.Log("[CatFlatLog] Send Player data");
         return player;
-
     }
 
     async Task UpdateLeaderboardAsync() // Async get leaderboard data
     {
+        Debug.Log("[CatFlatLog] Getting LBData");
         var taskLBData = new TaskCompletionSource<LBData>();
         YG2.onGetLeaderboard += LBDataReceived;
         YG2.GetLeaderboard(nameLeaderboard, countLeaders, 1);
@@ -101,14 +92,17 @@ public class PYG2 : MonoBehaviour, ISDK
             lBData = newLBData;
             taskLBData.SetResult(newLBData);
             YG2.onGetLeaderboard -= LBDataReceived;
+            Debug.Log("[CatFlatLog] LBData is get");
         }
     }
 
     async Task WaitLBData()
     {
+        Debug.Log("[CatFlatLog] Wait LBData");
         while(lBData == null)
         {
             await Task.Yield();
         }
+        Debug.Log("[CatFlatLog] LBData exist");
     }
 }
