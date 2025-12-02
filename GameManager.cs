@@ -1,9 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [HideInInspector] public static GameManager instance;
+    [SerializeField] Button stopButton;
     [SerializeField] TextMeshProUGUI scoreTx;
     [SerializeField] GameObject menuPanel;
     Transform playerTr;
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         _ = PYG2.instance.SaveRecordsAsync(score);
         Time.timeScale = 0;
+        stopButton.interactable = false;
         menuPanel.SetActive(true);
     }
 
