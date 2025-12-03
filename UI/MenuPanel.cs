@@ -12,6 +12,7 @@ public class MenuPanel : MonoBehaviour
 
         void LoadScene(string nameScene)
         {
+            PYG2.instance.ShowFullAds();
             if (Time.timeScale == 0)
             {
                 Time.timeScale = 1;

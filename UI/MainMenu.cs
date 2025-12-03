@@ -15,13 +15,16 @@ public class MainMenu : MonoBehaviour
         playButton.onClick.AddListener(LoadScene);
         leaderboardButton.onClick.AddListener(OpenLeaderBoard);
         menuButton.onClick.AddListener(OpenMainMenu);
+        PYG2.instance.GameReady(); // YG API load
     }
     void LoadScene()
     {
+        PYG2.instance.ShowFullAds();
         SceneManager.LoadScene("GameScene");
     }
     void OpenLeaderBoard()
     {
+        PYG2.instance.ShowFullAds();
         mainMenu.SetActive(false);
         leaderboard.SetActive(true);
     }

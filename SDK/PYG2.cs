@@ -22,9 +22,9 @@ public class PYG2 : MonoBehaviour, ISDK
         }
         _ = UpdateLeaderboardAsync();
     }
-    public void AwakeInterstitialAds()
+    public void ShowFullAds()
     {
-        // Нписать реализцию позже
+        YG2.InterstitialAdvShow();
     }
     public async Task SaveRecordsAsync(int records)
     {
@@ -104,5 +104,10 @@ public class PYG2 : MonoBehaviour, ISDK
             await Task.Yield();
         }
         Debug.Log("[CatFlatLog] LBData exist");
+    }
+
+    public void GameReady()
+    {
+        YG2.GameReadyAPI();
     }
 }
