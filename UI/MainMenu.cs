@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour
         playButton.onClick.AddListener(LoadScene);
         leaderboardButton.onClick.AddListener(OpenLeaderBoard);
         menuButton.onClick.AddListener(OpenMainMenu);
+        _ = PYG2.instance.GetLeaderboardAsync();
         PYG2.instance.GameReady(); // YG API load
     }
     void LoadScene()

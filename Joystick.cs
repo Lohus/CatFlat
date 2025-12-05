@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class PlayerInputController : MonoBehaviour
 {
-    public float moveSpeed = 80f; // скорость движения игрока
+    [Header("Movement Settings")]
+    public float maxMoveSpeed = 10f;     // Максимальная скорость влево/вправо
+    public float sensitivity = 0.015f;   // Чувствительность свайпа
+    public float deadZone = 20f;         // Минимальное смещение пальца
+
     private Rigidbody2D rb;
 
-    private Vector2 startTouchPos;   // точка начала касания
-    private bool isTouching;         // касание активно
+    private Vector2 inputStartPos;
+    private bool inputActive;
 
     void Start()
     {
@@ -15,61 +19,90 @@ public class PlayerInputController : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
+        ProcessInput();
     }
 
-    void HandleInput()
+    void ProcessInput()
     {
-        // === ПК (мышь) ===
-        if (Input.GetMouseButtonDown(0))
+        // === BEGIN input ===
+        if (IsInputDown())
         {
-            startTouchPos = Input.mousePosition;
-            isTouching = true;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            isTouching = false;
-            rb.velocity = new Vector2(0, rb.velocity.y); // остановить горизонтальное движение
+            inputStartPos = GetInputPosition();
+            inputActive = true;
         }
 
-        // === Телефон (тач) ===
-        if (Input.touchCount > 0)
+        // === END input ===
+        if (IsInputUp())
         {
-            Touch touch = Input.GetTouch(0);
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    startTouchPos = touch.position;
-                    isTouching = true;
-                    break;
-
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    isTouching = false;
-                    rb.velocity = new Vector2(0, rb.velocity.y);
-                    break;
-            }
+            inputActive = false;
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
-        // === Обработка движения ===
-        if (isTouching)
+        // === MOVE ===
+        if (inputActive)
         {
-            Vector2 currentPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
-            float deltaX = currentPos.x - startTouchPos.x;
+            Vector2 currentPos = GetInputPosition();
+            float deltaX = currentPos.x - inputStartPos.x;
 
-            // Если движение заметное, то задаем направление
-            float direction = Mathf.Sign(deltaX);
-            float absDelta = Mathf.Abs(deltaX);
-
-            if (absDelta > 10f) // минимальный порог движения
-            {
-                rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
-            }
-            else
+            // deadzone
+            if (Mathf.Abs(deltaX) < deadZone)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                return;
             }
+
+            float direction = Mathf.Sign(deltaX);
+            float intensity = Mathf.Clamp01(Mathf.Abs(deltaX) * sensitivity);
+
+            float horizontalSpeed = intensity * maxMoveSpeed * direction;
+
+            rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
         }
     }
+
+    // ======= INPUT HELPERS =======
+    bool IsInputDown()
+    {
+        return Input.GetMouseButtonDown(0)
+            || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
+    }
+
+    bool IsInputUp()
+    {
+        return Input.GetMouseButtonUp(0)
+            || (Input.touchCount > 0 &&
+                (Input.GetTouch(0).phase == TouchPhase.Ended ||
+                 Input.GetTouch(0).phase == TouchPhase.Canceled));
+    }
+
+    Vector2 GetInputPosition()
+    {
+        if (Input.touchCount > 0)
+            return Input.GetTouch(0).position;
+
+        return Input.mousePosition;
+    }
+
+    // ======= OPTIONAL: TELEPORT EDGE TO EDGE =======
+    void LateUpdate()
+    {
+        WrapAround();
+    }
+
+    void WrapAround()
+    {
+        Vector3 pos = transform.position;
+
+        float left = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)).x;
+        float right = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).x;
+
+        if (pos.x < left)
+            pos.x = right;
+        else if (pos.x > right)
+            pos.x = left;
+
+        transform.position = pos;
+    }
 }
+
 

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using YG;
 using YG.Utils.LB;
@@ -6,7 +7,7 @@ using YG.Utils.LB;
 public class PYG2 : MonoBehaviour, ISDK
 {
     public static PYG2 instance;
-    private string nameLeaderboard = "MaxScore";
+    private string nameLeaderboard = "Test";
     private int countLeaders = 3;
     private LBData lBData;
     void Awake()
@@ -29,18 +30,24 @@ public class PYG2 : MonoBehaviour, ISDK
     public async Task SaveRecordsAsync(int records)
     {
         Debug.Log("[CatFlatLog] Start save records");
-        while (lBData == null)
+        await WaitLBData();
+        if (lBData.currentPlayer != null)
         {
-            await Task.Yield();
-        }
-        if (records > lBData.currentPlayer.score)
-        {
-            YG2.SetLeaderboard(nameLeaderboard, records);
-            Debug.Log("[CatFlatLog] Records " + records + " added on leadeborad");
+            if ((records > lBData.currentPlayer.score) && YG2.player.auth == true)
+            {
+                YG2.SetLeaderboard(nameLeaderboard, records);
+                Debug.Log("[CatFlatLog] Records " + records + " added on leadeborad");
+            }
+            else
+            {
+                Debug.Log("[CatFlatLog] Records " + records + " small than leaderboard " + lBData.currentPlayer.score);
+            }
         }
         else
         {
-            Debug.Log("[CatFlatLog] Records " + records + " small than leaderboard " + lBData.currentPlayer.score);
+            Debug.Log("[CatFlatLog] Current Player is not on the leaderboard");
+            YG2.SetLeaderboard(nameLeaderboard, records);
+            Debug.Log("[CatFlatLog] Records " + records + " added on leadeborad");
         }
         _ = UpdateLeaderboardAsync();
     }
@@ -82,17 +89,18 @@ public class PYG2 : MonoBehaviour, ISDK
 
     async Task UpdateLeaderboardAsync() // Async get leaderboard data
     {
-        Debug.Log("[CatFlatLog] Getting LBData");
+        Debug.Log("[CatFlatLog] Getting LBData from " + nameLeaderboard);
         var taskLBData = new TaskCompletionSource<LBData>();
         YG2.onGetLeaderboard += LBDataReceived;
         YG2.GetLeaderboard(nameLeaderboard, countLeaders, 1);
         await taskLBData.Task;
         void LBDataReceived(LBData newLBData)
         {
+            if (newLBData == null) Debug.Log("[CatFlatLog] LBData is null");
             lBData = newLBData;
             taskLBData.SetResult(newLBData);
             YG2.onGetLeaderboard -= LBDataReceived;
-            Debug.Log("[CatFlatLog] LBData is get");
+            Debug.Log("[CatFlatLog] LBData is get from " + nameLeaderboard);
         }
     }
 
