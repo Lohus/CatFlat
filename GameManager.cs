@@ -37,11 +37,13 @@ public class GameManager : MonoBehaviour
     {
         GameEvents.OnPlayerDeath.AddListener(PlayerDead);
         GameEvents.PauseGame.AddListener(PauseGame);
+        GameEvents.ResumeGame.AddListener(ResumeGame);
     }
     public void OnDisable()
     {
        GameEvents.OnPlayerDeath.RemoveListener(PlayerDead);
        GameEvents.PauseGame.RemoveListener(PauseGame); 
+       GameEvents.ResumeGame.RemoveListener(ResumeGame); 
     }
 
     void UpScore()
@@ -59,6 +61,10 @@ public class GameManager : MonoBehaviour
     void PauseGame()
     {
         Time.timeScale = 0;
+    }
+    void ResumeGame()
+    {
+        Time.timeScale = 1;
     }
 
     void UPLevel()

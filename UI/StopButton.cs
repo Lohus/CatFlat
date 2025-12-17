@@ -12,38 +12,40 @@ public class StopButton: MonoBehaviour
     {
         stop = gameObject.GetComponent<Button>();
         imageButton = gameObject.GetComponent<Image>();
-        stop.onClick.AddListener(() => GameEvents.PauseGame?.Invoke());
+        stop.onClick.AddListener(PauseResumeAction);
     }
 
     public void OnEnable()
     {
-        GameEvents.PauseGame.AddListener();
+        GameEvents.PauseGame.AddListener(PauseGame);
+        GameEvents.ResumeGame.AddListener(ResumeGame);
     }
     public void OnDisable()
     {
-        GameEvents.PauseGame.RemoveListener();
-        stop.onClick.RemoveListener(() => GameEvents.PauseGame?.Invoke());
+        GameEvents.PauseGame.RemoveListener(PauseGame);
+        GameEvents.ResumeGame.RemoveListener(ResumeGame);
+        stop.onClick.RemoveListener(PauseResumeAction);
     }
 
     void PauseGame()
     {
+        gameObject.SetActive(true);
         imageButton.sprite = resumeGame;
     }
-    void PauseGame()
+    void ResumeGame()
+    {
+        imageButton.sprite = pauseGame;
+    }
+    void PauseResumeAction()
     {
         if (!pause)
         {
-            Time.timeScale = 0;
-            menuPanel.SetActive(true);
-            gameObject.SetActive(true);
-            imageButton.sprite = resumeGame;
+            GameEvents.PauseGame?.Invoke();
             pause = true;
         }
         else
         {
-            menuPanel.SetActive(false);
-            Time.timeScale = 1;
-            imageButton.sprite = pauseGame;
+            GameEvents.ResumeGame?.Invoke();
             pause = false;
         }
     }
