@@ -61,10 +61,12 @@ public class GameManager : MonoBehaviour
     void PauseGame()
     {
         Time.timeScale = 0;
+        menuPanel.SetActive(true);
     }
     void ResumeGame()
     {
         Time.timeScale = 1;
+        menuPanel.SetActive(false);
     }
 
     void UPLevel()
