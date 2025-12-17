@@ -14,7 +14,7 @@ public class DestroyZone : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Player>())
         {
-            GameManager.instance.PlayerDead();
+            GameEvents.OnPlayerDeath?.Invoke();
         }
     }
 }

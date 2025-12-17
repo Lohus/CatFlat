@@ -12,7 +12,22 @@ public class StopButton: MonoBehaviour
     {
         stop = gameObject.GetComponent<Button>();
         imageButton = gameObject.GetComponent<Image>();
-        stop.onClick.AddListener(PauseGame);
+        stop.onClick.AddListener(() => GameEvents.PauseGame?.Invoke());
+    }
+
+    public void OnEnable()
+    {
+        GameEvents.PauseGame.AddListener();
+    }
+    public void OnDisable()
+    {
+        GameEvents.PauseGame.RemoveListener();
+        stop.onClick.RemoveListener(() => GameEvents.PauseGame?.Invoke());
+    }
+
+    void PauseGame()
+    {
+        imageButton.sprite = resumeGame;
     }
     void PauseGame()
     {
@@ -32,4 +47,5 @@ public class StopButton: MonoBehaviour
             pause = false;
         }
     }
+
 }

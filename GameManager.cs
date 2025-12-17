@@ -33,6 +33,17 @@ public class GameManager : MonoBehaviour
         UPLevel();
     }
 
+    public void OnEnable()
+    {
+        GameEvents.OnPlayerDeath.AddListener(PlayerDead);
+        GameEvents.PauseGame.AddListener(PauseGame);
+    }
+    public void OnDisable()
+    {
+       GameEvents.OnPlayerDeath.RemoveListener(PlayerDead);
+       GameEvents.PauseGame.RemoveListener(PauseGame); 
+    }
+
     void UpScore()
     {
         int _score = Mathf.RoundToInt(playerTr.position.y * 10);
@@ -41,12 +52,13 @@ public class GameManager : MonoBehaviour
             score = _score;
         }
     }
-    public void PlayerDead()
+    void PlayerDead()
     {
         _ = PYG2.instance.SaveRecordsAsync(score);
+    }
+    void PauseGame()
+    {
         Time.timeScale = 0;
-        stopButton.interactable = false;
-        menuPanel.SetActive(true);
     }
 
     void UPLevel()

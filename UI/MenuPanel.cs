@@ -8,6 +8,7 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] Button replay, home, rewarded;
     void Start()
     {
+        GameEvents.OnPlayerDeath.AddListener(EnableMenu);
         //replay.onClick.AddListener(() => LoadScene("GameScene"));
         replay.onClick.AddListener(() => RewardedButton());
         home.onClick.AddListener(() => LoadScene("MainMenu"));
@@ -22,6 +23,14 @@ public class MenuPanel : MonoBehaviour
             SceneManager.LoadScene(nameScene);
         }
     }
+    public void OnDestroy()
+    {
+       GameEvents.OnPlayerDeath.RemoveListener(EnableMenu); 
+    }
+    void EnableMenu()
+    {
+        gameObject.SetActive(true);
+    } 
 
     void RewardedButton()
     {
