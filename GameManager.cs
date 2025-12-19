@@ -38,12 +38,14 @@ public class GameManager : MonoBehaviour
         GameEvents.OnPlayerDeath.AddListener(PlayerDead);
         GameEvents.PauseGame.AddListener(PauseGame);
         GameEvents.ResumeGame.AddListener(ResumeGame);
+        GameEvents.RewardGame.AddListener(ResumeGame);
     }
     public void OnDisable()
     {
        GameEvents.OnPlayerDeath.RemoveListener(PlayerDead);
        GameEvents.PauseGame.RemoveListener(PauseGame); 
-       GameEvents.ResumeGame.RemoveListener(ResumeGame); 
+       GameEvents.ResumeGame.RemoveListener(ResumeGame);
+       GameEvents.RewardGame.RemoveListener(ResumeGame); 
     }
 
     void UpScore()

@@ -51,6 +51,15 @@ public class Player : MonoBehaviour
         ChangeSpriteHorizontal();
     }
 
+    public void OnEnable()
+    {
+        GameEvents.RewardGame.AddListener(MovePlayer);
+    }
+
+    public void OnDisable()
+    {
+        GameEvents.RewardGame.RemoveListener(MovePlayer);
+    }
     void ChangeSpriteHorizontal()
     {
         if (rb2D.velocity.x < 0)
@@ -106,5 +115,22 @@ public class Player : MonoBehaviour
         {
             rb2D.velocity = new Vector2(rb2D.velocity.x, -maxVerticalSpeed);
         }
-    }        
+    }
+
+    void MovePlayer()
+    {
+        GameObject[] platforms =  GameObject.FindGameObjectsWithTag("Platform");
+        GameObject lowestPlatform = null;
+        float lowestY = Mathf.Infinity;
+        foreach (GameObject platform in platforms)
+        {
+            float currentY = platform.transform.position.y;
+            if (currentY < lowestY)
+            {
+                lowestY = currentY;
+                lowestPlatform = platform;
+            }
+        }
+        gameObject.transform.position = lowestPlatform.transform.position + new UnityEngine.Vector3(0, 1, 0);
+    }       
 }

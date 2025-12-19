@@ -20,12 +20,14 @@ public class StopButton: MonoBehaviour
         GameEvents.PauseGame.AddListener(PauseGame);
         GameEvents.ResumeGame.AddListener(ResumeGame);
         GameEvents.OnPlayerDeath.AddListener(DisableButton);
+        GameEvents.RewardGame.AddListener(EnableButton);
     }
     public void OnDisable()
     {
         GameEvents.PauseGame.RemoveListener(PauseGame);
         GameEvents.ResumeGame.RemoveListener(ResumeGame);
         GameEvents.OnPlayerDeath.RemoveListener(DisableButton);
+        GameEvents.RewardGame.RemoveListener(EnableButton);
         stop.onClick.RemoveListener(PauseResumeAction);
     }
 
@@ -34,13 +36,13 @@ public class StopButton: MonoBehaviour
         gameObject.SetActive(true);
         imageButton.sprite = resumeGame;
     }
-    void ResumeGame()
+    void ResumeGame() => imageButton.sprite = pauseGame;
+    void DisableButton() => stop.interactable = false;
+    void EnableButton()
     {
-        imageButton.sprite = pauseGame;
-    }
-    void DisableButton()
-    {
-        stop.interactable = false;
+        stop.interactable = true;
+        ResumeGame();
+        pause = false;
     }
     void PauseResumeAction()
     {
