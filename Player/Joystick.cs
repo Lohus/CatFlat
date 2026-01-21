@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerInputController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float maxMoveSpeed = 10f;     // Максимальная скорость влево/вправо
-    public float sensitivity = 0.015f;   // Чувствительность свайпа
-    public float deadZone = 20f;         // Минимальное смещение пальца
+    public float maxMoveSpeed = 10f;     
+    public float sensitivity = 0.015f;   
+    public float deadZone = 20f;
 
     private Rigidbody2D rb;
 
@@ -24,21 +24,18 @@ public class PlayerInputController : MonoBehaviour
 
     void ProcessInput()
     {
-        // === BEGIN input ===
         if (IsInputDown())
         {
             inputStartPos = GetInputPosition();
             inputActive = true;
         }
 
-        // === END input ===
         if (IsInputUp())
         {
             inputActive = false;
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
-        // === MOVE ===
         if (inputActive)
         {
             Vector2 currentPos = GetInputPosition();
@@ -60,7 +57,6 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
-    // ======= INPUT HELPERS =======
     bool IsInputDown()
     {
         return Input.GetMouseButtonDown(0)
@@ -83,7 +79,6 @@ public class PlayerInputController : MonoBehaviour
         return Input.mousePosition;
     }
 
-    // ======= OPTIONAL: TELEPORT EDGE TO EDGE =======
     void LateUpdate()
     {
         WrapAround();
